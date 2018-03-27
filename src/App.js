@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Container, Header, Progress } from 'semantic-ui-react';
+import { Divider, Segment, Container, Header, Progress } from 'semantic-ui-react';
 
 
 class App extends Component {
@@ -19,7 +19,7 @@ class LocationBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress_total_steps: 3,
+      progress_total_steps: 4,
       progress_current_step: 0
     }
   }
@@ -85,11 +85,7 @@ class LocationBox extends Component {
         result.json().then(
           (meetings) => {
             let meeting = meetings[0];
-            this.setState({
-              progress_text: 'Done',
-              progress_current_step: this.state.progress_current_step + 1,
-              meeting: meeting
-            });
+            this.getRootServer(meeting);
           }
         );
       },
@@ -100,8 +96,32 @@ class LocationBox extends Component {
     )
   }
 
+  getRootServer(meeting) {
+    this.setState({
+      progress_text: 'Retrieving root server url...',
+      progress_current_step: this.state.progress_current_step + 1,
+      meeting: meeting
+    });
+
+    let rootServerId = meeting.root_server_id;
+    let url = `https://tomato.na-bmlt.org/rest/v1/rootservers/${rootServerId}/`;
+    fetch(url).then(
+      (result) => {
+        result.json().then(
+          (root_server) => {
+            this.setState({rootServer: root_server});
+          }
+        );
+      },
+      (error) => {
+        // Error retrieving root server
+        // TODO: Handle errors!
+      }
+    );
+  }
+
   render() {
-    if (this.state.meeting) {
+    if (this.state.meeting && this.state.rootServer) {
       let infoLinks = (
         <ul>
           <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
@@ -119,6 +139,10 @@ class LocationBox extends Component {
 
             <Header as="h3">How do I learn more about the BMLT?</Header>
             {infoLinks}
+
+            <Divider/>
+
+            <Segment size="mini" secondary basic>Root server: {this.state.rootServer.root_server_url}</Segment>
           </div>
         );
       } else {
