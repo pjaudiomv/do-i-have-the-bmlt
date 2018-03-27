@@ -1,19 +1,20 @@
 resource "aws_cloudfront_distribution" "website" {
   enabled = true
 
+  default_root_object = "index.html"
+  aliases = ["doihavethebmlt.org", "www.doihavethebmlt.org"]
+
   origin {
     origin_id   = "origin-bucket-${aws_s3_bucket.website.id}"
     domain_name = "${aws_s3_bucket.website.website_endpoint}"
 
     custom_origin_config {
-      origin_protocol_policy = "https-only"
+      origin_protocol_policy = "http-only"
       http_port              = "80"
       https_port             = "443"
       origin_ssl_protocols   = ["TLSv1"]
     }
   }
-
-  default_root_object = "index.html"
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD", "DELETE", "OPTIONS", "PATCH", "POST", "PUT"]
