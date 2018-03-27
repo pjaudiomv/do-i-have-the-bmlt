@@ -37,7 +37,7 @@ class BMLTResult extends Component {
 
 class SearchAgainButton extends Component {
   render() {
-    return <Button fluid onClick={this.props.onClick}>Search For Another Location</Button>;
+    return <Button fluid onClick={this.props.onClick}>Search for Another Location</Button>;
   };
 }
 
