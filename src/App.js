@@ -19,7 +19,7 @@ class LocationBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress_total_steps: 4,
+      progress_total_steps: 3,
       progress_current_step: 0
     }
   }
@@ -47,9 +47,11 @@ class LocationBox extends Component {
           this.getNearestMeeting(latitude, longitude);
         },
         (error) => {
-          // Error retrieving location
-          // TODO: Handle errors!
-        }
+          this.setState({
+            progress_text: 'Error: ' + error.message,
+          })
+        },
+        {'timeout': 60000}
       );
     }
   }
@@ -68,7 +70,11 @@ class LocationBox extends Component {
         result.json().then(
           (meetings) => {
             let meeting = meetings[0];
-            this.getRootServer(meeting);
+            this.setState({
+              progress_text: 'Done',
+              progress_current_step: this.state.progress_current_step + 1,
+              meeting: meeting
+            });
           }
         );
       },
@@ -79,32 +85,8 @@ class LocationBox extends Component {
     )
   }
 
-  getRootServer(meeting) {
-    this.setState({
-      progress_text: 'Retrieving root server url...',
-      progress_current_step: this.state.progress_current_step + 1,
-      meeting: meeting
-    });
-
-    let rootServerId = meeting.root_server_id;
-    let url = `https://tomato.na-bmlt.org/rest/v1/rootservers/${rootServerId}/`;
-    fetch(url).then(
-      (result) => {
-        result.json().then(
-          (root_server) => {
-            this.setState({root_server: root_server});
-          }
-        );
-      },
-      (error) => {
-        // Error retrieving root server
-        // TODO: Handle errors!
-      }
-    );
-  }
-
   render() {
-    if (this.state.meeting && this.state.root_server) {
+    if (this.state.meeting) {
       let infoLinks = (
         <ul>
           <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
@@ -119,7 +101,6 @@ class LocationBox extends Component {
           <div>
             <Header as="h3">Yes!</Header>
             <p>The nearest meeting in our database is {milesText} from you, so we think your region probably is using the BMLT. If you don't think this is the case, follow the links below to learn more about how to get started!</p>
-            <p>Your root server: {this.state.root_server.root_server_url}</p>
 
             <Header as="h3">How do I learn more about the BMLT?</Header>
             {infoLinks}
@@ -138,10 +119,12 @@ class LocationBox extends Component {
       }
     } else if (this.state.progress_text || this.state.latitude) {
       return (
-        <Progress
-          total={this.state.progress_total_steps}
-          value={this.state.progress_current_step}
-          label={this.state.progress_text}/>
+        <div>
+          <Progress
+            total={this.state.progress_total_steps}
+            value={this.state.progress_current_step}
+            label={this.state.progress_text}/>
+        </div>
       )
     } else {
       return (
