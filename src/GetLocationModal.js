@@ -46,7 +46,7 @@ class GetLocationModal extends Component {
             (r) => {
               if (r.status !== 'OK') {
                 if (this.props.errorCallback) {
-                  this.props.errorCallback(r.status);
+                  this.props.errorCallback();
                 }
                 return;
               }
@@ -57,7 +57,7 @@ class GetLocationModal extends Component {
           )
         },
         (error) => {
-
+          this.props.errorCallback();
         }
       )
     };
