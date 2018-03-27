@@ -47,11 +47,26 @@ class LocationBox extends Component {
           this.getNearestMeeting(latitude, longitude);
         },
         (error) => {
+          let message;
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              message = "Error: User denied the request for Geolocation.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              message = "Error: Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              message = "Error: The request to get user location timed out.";
+              break;
+            default:
+              message = error.message;
+              break;
+          }
           this.setState({
-            progress_text: 'Error: ' + error.message,
+            progress_text: message,
           })
         },
-        {'timeout': 60000}
+        {timeout: 60000}
       );
     }
   }
