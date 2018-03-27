@@ -19,6 +19,7 @@ class LocationBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      progress_text: 'Initializing...',
       progress_total_steps: 4,
       progress_current_step: 0
     }
@@ -64,7 +65,7 @@ class LocationBox extends Component {
           }
           this.setState({
             progress_text: message,
-          })
+          });
         },
         {
           timeout: 60000,
@@ -125,54 +126,62 @@ class LocationBox extends Component {
 
   render() {
     if (this.state.meeting && this.state.rootServer) {
-      let infoLinks = (
-        <ul>
-          <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
-          <li>Join our <a href="https://www.facebook.com/groups/149214049107349/" target="_blank" rel="noopener noreferrer">Facebook Group</a>.</li>
-        </ul>
-      );
-
       let miles = Math.round(Math.round(this.state.meeting.distance_in_miles));
       let milesText = miles === 1 ? `${miles} mile` : `${miles} miles`;
-      if (miles < 100) {
-        return (
-          <div>
-            <Header as="h3">Yes!</Header>
-            <p>The nearest meeting in our database is {milesText} from you, so we think your region probably is using the BMLT. If you don't think this is the case, follow the links below to learn more about how to get started!</p>
-
-            <Header as="h3">How do I learn more about the BMLT?</Header>
-            {infoLinks}
-
-            <Divider/>
-
-            <Segment size="mini" secondary basic>Root server: {this.state.rootServer.root_server_url}</Segment>
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <Header as="h3">No ☹</Header>
-            <p>The nearest meeting in our database is {milesText} from you, so your region probably is not using the BMLT.</p>
-
-            <Header as="h3">I want to use the BMLT. How do I get started?</Header>
-            {infoLinks}
-          </div>
-        );
-      }
-    } else if (this.state.progress_text || this.state.latitude) {
+      let hasBMLT = miles < 100;
       return (
-        <div>
-          <Progress
-            total={this.state.progress_total_steps}
-            value={this.state.progress_current_step}
-            label={this.state.progress_text}/>
-        </div>
-      )
+        <HasBMLTResult
+          numMiles={this.state.meeting.distance_in_miles}
+          hasBMLT={hasBMLT}
+          rootServerURL={this.state.rootServer.root_server_url}/>
+      );
     } else {
       return (
-        <div/>
+        <Progress
+          total={this.state.progress_total_steps}
+          value={this.state.progress_current_step}
+          label={this.state.progress_text}/>
+      )
+    }
+  }
+}
+
+class HasBMLTResult extends Component {
+  render() {
+    let miles = Math.round(Math.round(this.props.numMiles));
+    let milesText = miles === 1 ? `${miles} mile` : `${miles} miles`;
+    if (this.props.hasBMLT) {
+      return (
+        <div>
+          <Header as="h3">Yes!</Header>
+          <p>The nearest meeting in our database is {milesText} from you, so we think your region probably is using the BMLT. If you don't think this is the case, follow the links below to learn more about how to get started!</p>
+          <Header as="h3">How do I learn more about the BMLT?</Header>
+          <InfoLinks/>
+          <Divider/>
+          <Segment size="mini" secondary basic>Root server: {this.props.rootServerURL}</Segment>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Header as="h3">No ☹</Header>
+          <p>The nearest meeting in our database is {milesText} from you, so your region probably is not using the BMLT.</p>
+          <Header as="h3">I want to use the BMLT. How do I get started?</Header>
+          <InfoLinks/>
+        </div>
       );
     }
+  }
+}
+
+class InfoLinks extends Component {
+  render() {
+    return (
+      <ul>
+        <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
+        <li>Join our <a href="https://www.facebook.com/groups/149214049107349/" target="_blank" rel="noopener noreferrer">Facebook Group</a>.</li>
+      </ul>
+    );
   }
 }
 
