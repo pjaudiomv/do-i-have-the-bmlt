@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Progress, } from 'semantic-ui-react';
+import { Progress } from 'semantic-ui-react';
 import GetLocationModal from './GetLocationModal.js';
 import BMLTResult from './BMLTResult.js';
 
@@ -17,21 +17,23 @@ class LocationBox extends Component {
     this.getLocation();
   }
 
-  getLocation() {
+  getLocation({ forceGeocode = false } = {}) {
     this.setState({
       progress_text: 'Determining location...',
-      progress_current_step: 1
+      progress_current_step: 1,
+      meeting: undefined,
+      rootServer: undefined
     });
 
     let urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('latitude') && urlParams.has('longitude')) {
-      let latitude = urlParams.get('latitude');
-      let longitude = urlParams.get('longitude');
-      this.getNearestMeeting(latitude, longitude);
-    } else if (urlParams.has('forceGeocode')) {
+    if (forceGeocode || urlParams.has('forceGeocode')) {
       this.setState({
         askForLocation: true,
       });
+    } else if (urlParams.has('latitude') && urlParams.has('longitude')) {
+      let latitude = urlParams.get('latitude');
+      let longitude = urlParams.get('longitude');
+      this.getNearestMeeting(latitude, longitude);
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -45,7 +47,7 @@ class LocationBox extends Component {
           });
         },
         {
-          timeout: 20000,
+          timeout: 15000,
           maximumAge: 60000
         }
       );
@@ -107,10 +109,14 @@ class LocationBox extends Component {
       let miles = Math.round(Math.round(this.state.meeting.distance_in_miles));
       let hasBMLT = miles < 100;
       return (
-        <BMLTResult
-          numMiles={this.state.meeting.distance_in_miles}
-          hasBMLT={hasBMLT}
-          rootServerURL={this.state.rootServer.root_server_url}/>
+        <div>
+          <BMLTResult
+            numMiles={this.state.meeting.distance_in_miles}
+            hasBMLT={hasBMLT}
+            rootServerURL={this.state.rootServer.root_server_url}
+            searchAgainHandler={() => this.getLocation({forceGeocode:true})} />
+        </div>
+
       );
     } else {
       let handleError = () => {

@@ -5,7 +5,8 @@ class GetLocationModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      locationText: ''
+      locationText: '',
+      visible: props.visible
     }
   }
 
