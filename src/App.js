@@ -56,7 +56,7 @@ class LocationBox extends Component {
               message = "Error: Location information is unavailable.";
               break;
             case error.TIMEOUT:
-              message = "Error: The request to get user location timed out.";
+              message = "Error: Timed out determining location. Please try again.";
               break;
             default:
               message = error.message;
@@ -66,7 +66,10 @@ class LocationBox extends Component {
             progress_text: message,
           })
         },
-        {timeout: 60000}
+        {
+          timeout: 60000,
+          maximumAge: 60000
+        }
       );
     }
   }
