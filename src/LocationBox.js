@@ -64,7 +64,8 @@ class LocationBox extends Component {
     });
 
     let url = `https://tomato.na-bmlt.org/main_server/client_interface/json/?switcher=GetSearchResults&lat_val=${latitude}&long_val=${longitude}&geo_width=-1`;
-    fetch(url).then(
+    let options = {headers: {'user-agent': navigator.userAgent + ' +dihtbmlt'}};
+    fetch(url, options).then(
       (result) => {
         result.json().then(
           (meetings) => {
@@ -89,7 +90,8 @@ class LocationBox extends Component {
 
     let rootServerId = meeting.root_server_id;
     let url = `https://tomato.na-bmlt.org/rest/v1/rootservers/${rootServerId}/`;
-    fetch(url).then(
+    let options = {headers: {'user-agent': navigator.userAgent + ' +dihtbmlt'}};
+    fetch(url, options).then(
       (result) => {
         result.json().then(
           (root_server) => {
