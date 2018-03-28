@@ -108,12 +108,12 @@ class LocationBox extends Component {
 
   render() {
     if (this.state.meeting && this.state.rootServer) {
-      let miles = Math.round(Math.round(this.state.meeting.distance_in_miles));
-      let hasBMLT = miles < 100;
+      let hasBMLT = Math.round(Math.round(this.state.meeting.distance_in_miles)) < 100;
       return (
         <div>
           <BMLTResult
-            numMiles={this.state.meeting.distance_in_miles}
+            miles={this.state.meeting.distance_in_miles}
+            kilometers={this.state.meeting.distance_in_km}
             hasBMLT={hasBMLT}
             rootServerURL={this.state.rootServer.root_server_url}
             searchAgainHandler={() => this.getLocation({forceGeocode:true})} />
