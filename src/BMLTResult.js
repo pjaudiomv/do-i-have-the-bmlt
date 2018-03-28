@@ -15,7 +15,7 @@ class BMLTResult extends Component {
 
     let getContent = () => {
       if (this.props.hasBMLT) {
-        return `The nearest meeting in our database is ${milesText} from you, so we think your local service body probably is using the BMLT. If you don't think this is the case, follow the links below to learn more about how to get started!`
+        return `The nearest meeting in our database is ${milesText} from you, so we think your local service body probably is using the BMLT. If you don't think this is the case, follow the links below to learn more about how to get started!`;
       }
       return `The nearest meeting in our database is ${milesText} from you, so your local service body probably is not using the BMLT.`;
     };
