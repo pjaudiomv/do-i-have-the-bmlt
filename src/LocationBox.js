@@ -116,7 +116,9 @@ class LocationBox extends Component {
             kilometers={this.state.meeting.distance_in_km}
             hasBMLT={hasBMLT}
             rootServerURL={this.state.rootServer.root_server_url}
-            searchAgainHandler={() => this.getLocation({forceGeocode:true})} />
+            searchAgainHandler={() => this.getLocation({forceGeocode:true})}
+            latitude={this.state.latitude}
+            longitude={this.state.longitude}/>
         </div>
 
       );
