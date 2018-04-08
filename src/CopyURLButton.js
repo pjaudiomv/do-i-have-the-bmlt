@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Input } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import copy from 'copy-to-clipboard';
 
-class BMLTResult extends Component {
+class CopyURLButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,14 +21,11 @@ class BMLTResult extends Component {
       this.setState({copied: true});
     };
 
-    let content = this.state.copied === true ? 'Copied': 'Copy URL';
+    let content = this.state.copied === true ? 'Copied Search URL to Clipboard': 'Copy Search URL to Clipboard';
     return (
-      <Input
-        action={{ labelPosition: 'right', icon: 'copy', content: content, onClick:handleCopy }}
-        fluid
-        defaultValue={url} />
+      <Button fluid onClick={handleCopy}>{content}</Button>
     );
   }
 }
 
-export default BMLTResult;
+export default CopyURLButton;

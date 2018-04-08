@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Divider, Header, Segment } from 'semantic-ui-react';
-import CopyURLInput from './CopyURLInput.js'
+import CopyURLButton from './CopyURLButton.js'
 
 class BMLTResult extends Component {
   render() {
@@ -45,8 +45,8 @@ class BMLTResult extends Component {
       <div>
         <Header as="h3">{getAnswer()}</Header>
         <p>{getContent()}</p>
-        <Header as="h3">Share this search</Header>
-        <CopyURLInput latitude={this.props.latitude} longitude={this.props.longitude} />
+        <Divider hidden/>
+        <CopyURLButton latitude={this.props.latitude} longitude={this.props.longitude} />
         <Header as="h3">{getLearnMoreText()}</Header>
         <ul>
           <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
