@@ -25,6 +25,7 @@ class CopyURLInput extends Component {
     return (
       <Input
         action={{ labelPosition: 'right', icon: 'copy', content: content, onClick: handleCopy }}
+        size="tiny"
         fluid
         defaultValue={url} />
     );

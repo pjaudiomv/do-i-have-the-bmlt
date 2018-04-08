@@ -50,7 +50,7 @@ class BMLTResult extends Component {
           <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
           <li>Join our <a href="https://www.facebook.com/groups/149214049107349/" target="_blank" rel="noopener noreferrer">Facebook Group</a>.</li>
         </ul>
-        <Header as="h3">Share this search</Header>
+        <Header as="h3">Share This Search</Header>
         <CopyURLInput latitude={this.props.latitude} longitude={this.props.longitude} />
         <Divider hidden/>
         <Button fluid onClick={this.props.searchAgainHandler}>Search for Another Location</Button>
