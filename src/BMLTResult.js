@@ -47,7 +47,7 @@ class BMLTResult extends Component {
         <p>{getContent()}</p>
         <Header as="h3">{getLearnMoreText()}</Header>
         <ul>
-          <li>Visit the <a href="https://bmlt.magshare.net/" target="_blank" rel="noopener noreferrer">website</a>.</li>
+          <li>Visit the <a href="https://bmlt.app/" target="_blank" rel="noopener noreferrer">website</a>.</li>
           <li>Join our <a href="https://www.facebook.com/groups/149214049107349/" target="_blank" rel="noopener noreferrer">Facebook Group</a>.</li>
         </ul>
         <Header as="h3">Share This Search</Header>
